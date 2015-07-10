@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+
+<Resource
+        name="jdbc/Park"
+        auth="Container"
+        type="javax.sql.DataSource"
+        factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+        initialSize="5"
+        validationQuery="SELECT 1"
+        testOnBorrow="true"
+        removeAbandoned="true"
+        removeAbandonedTimeout="55"
+        username="root"
+        password=""
+        driverClassName="com.mysql.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/unisystem?connectTimeout=3000"
+        />
+
+</Context>
