@@ -1,3 +1,5 @@
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="entities.Teacher" %>
 <%@ page language="java" contentType="text/html; charset=Cp1251" pageEncoding="Cp1251"%>
 <meta http-equiv="content-type" content="text/html; charset=cp1251">
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -126,12 +128,24 @@
     <hr/>
     <div class="row row-offcanvas row-offcanvas-right">
 
+        <%
+            ArrayList<Teacher> teachers = (ArrayList<Teacher>)request.getAttribute("teachers");
+            Integer teacherId = (Integer)request.getAttribute("currentTeacher");
+            Teacher currentTeacher = null;
+            for (Teacher newTeacher : teachers) {
+                if( newTeacher.getId() == teacherId){
+                    currentTeacher = newTeacher;
+                    break;
+                }
+            }
+        %>
         <div class="col-xs-12 col-sm-9">
             <p class="pull-right visible-xs">
                 <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
             </p>
             <div class="jumbotron">
-                <p>Schedule of lessons for ${teachers[currentTeacher - 1].name} ${teachers[currentTeacher - 1].surname}</p>
+                <%--<p>Schedule of lessons for ${teachers[currentTeacher - 1].name} ${teachers[currentTeacher - 1].surname}</p>--%>
+                <p>Schedule of lessons for <%=currentTeacher.getName()%> <%=currentTeacher.getSurname()%></p>
             </div>
             <div class="row">
                 <c:forEach var="lesson" items="${lessons}">
@@ -140,8 +154,8 @@
 
                         <p>
                             <c:forEach var="student" items="${lesson.students}">
-                                <li>${student.name} ${student.surname} </li>
-                            </c:forEach>
+                        <li>${student.name} ${student.surname} </li>
+                        </c:forEach>
                         </p>
 
                     </div>
