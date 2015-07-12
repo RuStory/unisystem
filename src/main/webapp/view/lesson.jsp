@@ -41,60 +41,62 @@
 
 <body>
 
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">New lesson</h4>
-            </div>
-            <div class="modal-body">
-                <form id="lesson-form" action="/controller">
-                    <div class="form-group">
-                        <label class="control-label">Teacher</label>
-                        <select class="form-control" name="teacher"">
-                            <c:forEach var="teacher" items="${teachers}">
-                                <option>${teacher.name} ${teacher.surname}</option>
-                            </c:forEach>
-                        </select>
-                        <input type="hidden" name="teacher" id=hiddenTeacher>
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">New lesson</h4>
+        </div>
+        <div class="modal-body">
+            <form id="lesson-form" action="/controller">
+                <div class="form-group">
+                    <label class="control-label">Teacher</label>
+                    <select class="form-control" name="teacher">
+                        <c:forEach var="teacher" items="${teachers}">
+                            <option>${teacher.name} ${teacher.surname}</option>
+                        </c:forEach>
+                    </select>
+                    <input type="hidden" name="teacher" id=hiddenTeacher>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Room</label>
+                    <select class="form-control" name="room">
+                        <c:forEach var="room" items="${rooms}">
+                            <option>${room.number}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Students</label>
+                    <div class="horizontal">
+                        <c:forEach var="student" items="${students}">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="studentForLesson${student.id}" value="${student.id}"> ${student.name} ${student.surname}
+                            </label>
+                        </c:forEach>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">Room</label>
-                        <select class="form-control" name="room">
-                            <c:forEach var="room" items="${rooms}">
-                                <option>${room.number}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Student</label>
-                        <select class="form-control" name="student">
-                            <c:forEach var="student" items="${students}">
-                                <option>${student.name} ${student.surname}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Name</label>
-                        <input type="text" name="name" required="true" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Time</label>
-                        <input type="time" name="time" required="true" class="form-control">
-                    </div>
-                    <input type="hidden" id="hiddenButton" name="command">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Name</label>
+                    <input type="text" name="name" required="true" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Time</label>
+                    <input type="time" name="time" required="true" class="form-control">
+                </div>
+                <input type="hidden" id="hiddenButton" name="command">
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="
                     document.getElementById('hiddenButton').value='schedule';
                     document.getElementById('lesson-form').submit()">Close</button>
-                <button type="button" class="btn btn-primary" onclick="
+            <button type="button" class="btn btn-primary" onclick="
                     document.getElementById('hiddenButton').value='new_lesson';
                     document.getElementById('lesson-form').submit()">Save</button>
-            </div>
         </div>
     </div>
+</div>
 
 
 

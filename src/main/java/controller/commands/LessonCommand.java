@@ -14,6 +14,8 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
@@ -28,7 +30,16 @@ public class LessonCommand implements ActionCommand {
 
         TransactionManager tx = new JDBCTransactionManager();
         final Teacher newTeacher = new Teacher(req.getParameter("teacher").split(" ")[0], req.getParameter("teacher").split(" ")[1]);
-        final Student newStudent = new Student(req.getParameter("student").split(" ")[0], req.getParameter("student").split(" ")[1]);
+        final List<Integer> studentsId = new ArrayList<>();
+
+        Enumeration<String> parameterNames = req.getParameterNames();
+        while(parameterNames.hasMoreElements()) {
+            String paramName = parameterNames.nextElement();
+            if(paramName.startsWith("studentForLesson")){
+                studentsId.add(Integer.parseInt(req.getParameter(paramName)));
+            }
+        }
+
         final Room newRoom = new Room(Integer.parseInt(req.getParameter("room")));
         String name = req.getParameter("name");
         Time time = Time.valueOf(req.getParameter("time")+":00");
@@ -44,15 +55,6 @@ public class LessonCommand implements ActionCommand {
             };
             Integer teacherId = tx.doInTransaction(teacherUnit);
             newTeacher.setId(teacherId);
-
-            Callable<Integer> studentUnit = new Callable<Integer>() {
-                @Override
-                public Integer call() throws Exception {
-                    return DaoFactory.getInstance().createStudentDao().getId(newStudent);
-                }
-            };
-            final Integer studentId = tx.doInTransaction(studentUnit);
-            newStudent.setId(studentId);
 
             Callable<Integer> roomUnit = new Callable<Integer>() {
                 @Override
@@ -75,11 +77,13 @@ public class LessonCommand implements ActionCommand {
             Callable<Boolean> studentOnLessonUnit = new Callable<Boolean>() {
                 @Override
                 public Boolean call() throws Exception {
-                    return DaoFactory.getInstance().createLessonDao().createStudentOnLesson(lessonId, studentId);
+                    for (Integer studentId : studentsId) {
+                        DaoFactory.getInstance().createLessonDao().createStudentOnLesson(lessonId, studentId);
+                    }
+                    return true;
                 }
             };
             tx.doInTransaction(studentOnLessonUnit);
-
 
             req.setAttribute("currentTeacher", currentTeacher);
         } catch (Exception e) {
